@@ -1,0 +1,92 @@
+/* SNAKE 2040 — стильдер. Түстер: ашық көгілдір, күлгін, аспан көк, қызғылт */
+:root{
+  --hue:200;              /* әр 5 ұпай сайын JS өзгертеді */
+  --ink:#14163a;          /* негізгі мәтін (ашық фонда жоғары контраст) */
+  --focus:#0b3dff;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+
+body{
+  margin:0;min-height:100vh;padding:12px 12px 32px;
+  font-family:"Segoe UI",Verdana,Arial,sans-serif;line-height:1.5;color:var(--ink);
+  background:linear-gradient(135deg,#d9f3ff 0%,#e8e0ff 50%,#cfe6ff 100%) fixed;
+}
+.app{max-width:480px;margin:0 auto}
+
+/* Тек экран оқитын құралға арналған мәтін */
+.vh{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.skip{position:absolute;left:-999px;top:8px;background:#fff;color:var(--ink);padding:10px 14px;border-radius:10px;border:3px solid var(--ink);z-index:10}
+.skip:focus{left:8px}
+
+/* Логотип */
+.logo{margin:.2em 0 0;text-align:center;font-size:clamp(2.1rem,9vw,3.4rem);font-weight:900;letter-spacing:.06em}
+.logo span{background:linear-gradient(90deg,#d6246e,#5b2bd6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tagline{margin:0 0 12px;text-align:center;font-weight:700;color:#3b2a8f}
+
+/* Көрсеткіштер */
+.stats{list-style:none;margin:0 0 12px;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.stats li{background:rgba(255,255,255,.9);border:2px solid #fff;border-radius:16px;padding:6px 4px;text-align:center;box-shadow:0 4px 12px rgba(91,43,214,.15)}
+.stats span{display:block;font-size:.78rem;font-weight:700}
+.stats strong{display:block;font-size:1.3rem}
+.stats strong.bump{animation:bump .35s ease}
+@keyframes bump{50%{transform:scale(1.35);color:#d6246e}}
+
+/* Ойын алаңы */
+.board-wrap{
+  position:relative;border-radius:26px;overflow:hidden;background:#151a45;
+  border:6px solid hsl(var(--hue) 90% 60%);
+  box-shadow:0 0 24px hsl(var(--hue) 90% 60% / .7),0 8px 24px rgba(20,22,58,.3);
+  transition:border-color .5s,box-shadow .5s;
+}
+canvas{display:block;width:100%;height:auto;aspect-ratio:1/1;touch-action:none}
+canvas:focus-visible{outline:5px solid var(--focus);outline-offset:-5px}
+
+.overlay{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  padding:18px;text-align:center;background:rgba(255,255,255,.95);
+}
+.overlay h3{margin:0;font-size:1.6rem}
+.overlay p{margin:0 0 6px;max-width:30ch}
+
+/* Батырмалар */
+.btn{
+  font:inherit;font-weight:800;font-size:1.1rem;color:var(--ink);cursor:pointer;
+  padding:12px 20px;min-height:48px;border-radius:16px;border:3px solid var(--ink);
+  box-shadow:0 4px 0 var(--ink);transition:transform .15s,box-shadow .15s;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 0 var(--ink)}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}
+.btn:focus-visible,select:focus-visible,input:focus-visible{outline:4px solid var(--focus);outline-offset:3px}
+.btn.pink{background:linear-gradient(135deg,#ff8fc0,#ff5fa2)}
+.btn.cyan{background:linear-gradient(135deg,#9af0ff,#38d9ff)}
+.btn.yellow{background:linear-gradient(135deg,#fff08a,#ffc933)}
+
+.dpad{display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(2,64px);gap:8px;justify-content:center;margin:16px 0 8px}
+.dpad .btn{padding:0;font-size:1.5rem}
+.dpad .up{grid-column:2;grid-row:1}
+.dpad .left{grid-column:1;grid-row:2}
+.dpad .down{grid-column:2;grid-row:2}
+.dpad .right{grid-column:3;grid-row:2}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:16px}
+
+/* Карточкалар */
+.card{background:rgba(255,255,255,.9);border:2px solid #fff;border-radius:20px;padding:14px 16px;margin-bottom:14px;box-shadow:0 4px 12px rgba(91,43,214,.15)}
+.card h2{margin:0 0 8px;font-size:1.25rem}
+fieldset{border:0;margin:0;padding:0;display:grid;gap:6px}
+label{font-weight:700}
+select{font:inherit;min-height:44px;padding:6px 10px;border-radius:12px;border:3px solid var(--ink);background:#fff;color:var(--ink)}
+.check{display:flex;align-items:center;gap:10px;min-height:44px}
+.check input{width:24px;height:24px}
+.note{font-size:.9rem;margin:8px 0 0}
+.rec{margin:0;padding-left:1.4em}
+.rec li{margin:2px 0}
+.help{margin:0;padding-left:1.2em}
+kbd{background:#fff;border:2px solid var(--ink);border-radius:8px;padding:1px 6px;font-weight:700}
+footer{text-align:center;font-size:.9rem}
+
+/* Қозғалысты азайту (WCAG 2.3.3) */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+@media (max-width:360px){.stats{grid-template-columns:repeat(2,1fr)}}
